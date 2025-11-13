@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="auth-page">
+    <main class="auth-wrapper">
+        <section class="auth-card" aria-labelledby="register-heading">
+            <header class="auth-header">
+                <h1 id="register-heading">Create Your Account</h1>
+                <p>Join our community and unlock access to exclusive features.</p>
+            </header>
+            <form class="auth-form" action="#" method="post" novalidate>
+                <div class="form-field">
+                    <label for="register-name">Full name</label>
+                    <input type="text" id="register-name" name="name" autocomplete="name" required>
+                </div>
+                <div class="form-field">
+                    <label for="register-email">Email address</label>
+                    <input type="email" id="register-email" name="email" autocomplete="email" required>
+                </div>
+                <div class="form-field">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" name="password" autocomplete="new-password" required>
+                </div>
+                <div class="form-field">
+                    <label for="register-confirm-password">Confirm password</label>
+                    <input type="password" id="register-confirm-password" name="confirm_password" autocomplete="new-password" required>
+                </div>
+                <button class="btn-primary" type="submit">Create Account</button>
+            </form>
+            <footer class="auth-footer">
+                <p>Already have an account? <a class="text-link" href="login.html">Sign in</a>.</p>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>
+
