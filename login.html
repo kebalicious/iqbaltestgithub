@@ -13,17 +13,35 @@
                 <h1 id="login-heading">Welcome Back</h1>
                 <p>Sign in to access your account and manage your preferences.</p>
             </header>
-            <form class="auth-form" action="#" method="post">
+            <form class="auth-form" id="login-form" action="#" method="post" novalidate>
                 <div class="form-field">
                     <label for="login-email">Email address</label>
-                    <input type="email" id="login-email" name="email" autocomplete="email" required>
+                    <input 
+                        type="email" 
+                        id="login-email" 
+                        name="email" 
+                        autocomplete="email" 
+                        required
+                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                        aria-describedby="login-email-error"
+                    >
+                    <span class="error-message" id="login-email-error" role="alert"></span>
                 </div>
                 <div class="form-field">
                     <div class="field-header">
                         <label for="login-password">Password</label>
                         <a class="text-link" href="#">Forgot password?</a>
                     </div>
-                    <input type="password" id="login-password" name="password" autocomplete="current-password" required>
+                    <input 
+                        type="password" 
+                        id="login-password" 
+                        name="password" 
+                        autocomplete="current-password" 
+                        required
+                        minlength="6"
+                        aria-describedby="login-password-error"
+                    >
+                    <span class="error-message" id="login-password-error" role="alert"></span>
                 </div>
                 <div class="form-row">
                     <label class="checkbox">
@@ -38,6 +56,86 @@
             </footer>
         </section>
     </main>
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('login-email');
+        const passwordInput = document.getElementById('login-password');
+        const emailError = document.getElementById('login-email-error');
+        const passwordError = document.getElementById('login-password-error');
+
+        // Real-time validation
+        emailInput.addEventListener('blur', validateEmail);
+        emailInput.addEventListener('input', () => {
+            if (emailError.textContent) validateEmail();
+        });
+
+        passwordInput.addEventListener('blur', validatePassword);
+        passwordInput.addEventListener('input', () => {
+            if (passwordError.textContent) validatePassword();
+        });
+
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            emailError.textContent = '';
+            emailInput.classList.remove('error');
+
+            if (!email) {
+                emailError.textContent = 'Email address is required';
+                emailInput.classList.add('error');
+                return false;
+            }
+
+            const emailPattern = /^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/i;
+            if (!emailPattern.test(email)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailInput.classList.add('error');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            passwordError.textContent = '';
+            passwordInput.classList.remove('error');
+
+            if (!password) {
+                passwordError.textContent = 'Password is required';
+                passwordInput.classList.add('error');
+                return false;
+            }
+
+            if (password.length < 6) {
+                passwordError.textContent = 'Password must be at least 6 characters';
+                passwordInput.classList.add('error');
+                return false;
+            }
+
+            return true;
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (isEmailValid && isPasswordValid) {
+                // Form is valid, you can submit here
+                console.log('Form is valid, submitting...');
+                // loginForm.submit(); // Uncomment when ready to submit
+                alert('Login form is valid! (This is a demo)');
+            } else {
+                // Focus first invalid field
+                if (!isEmailValid) {
+                    emailInput.focus();
+                } else if (!isPasswordValid) {
+                    passwordInput.focus();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 
