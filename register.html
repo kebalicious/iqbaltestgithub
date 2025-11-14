@@ -13,22 +13,59 @@
                 <h1 id="register-heading">Create Your Account</h1>
                 <p>Join our community and unlock access to exclusive features.</p>
             </header>
-            <form class="auth-form" action="#" method="post" novalidate>
+            <form class="auth-form" id="register-form" action="#" method="post" novalidate>
                 <div class="form-field">
                     <label for="register-name">Full name</label>
-                    <input type="text" id="register-name" name="name" autocomplete="name" required>
+                    <input 
+                        type="text" 
+                        id="register-name" 
+                        name="name" 
+                        autocomplete="name" 
+                        required
+                        minlength="2"
+                        pattern="[A-Za-z\s]{2,}"
+                        aria-describedby="register-name-error"
+                    >
+                    <span class="error-message" id="register-name-error" role="alert"></span>
                 </div>
                 <div class="form-field">
                     <label for="register-email">Email address</label>
-                    <input type="email" id="register-email" name="email" autocomplete="email" required>
+                    <input 
+                        type="email" 
+                        id="register-email" 
+                        name="email" 
+                        autocomplete="email" 
+                        required
+                        pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                        aria-describedby="register-email-error"
+                    >
+                    <span class="error-message" id="register-email-error" role="alert"></span>
                 </div>
                 <div class="form-field">
                     <label for="register-password">Password</label>
-                    <input type="password" id="register-password" name="password" autocomplete="new-password" required>
+                    <input 
+                        type="password" 
+                        id="register-password" 
+                        name="password" 
+                        autocomplete="new-password" 
+                        required
+                        minlength="8"
+                        aria-describedby="register-password-error register-password-hint"
+                    >
+                    <span class="error-message" id="register-password-error" role="alert"></span>
+                    <span class="field-hint" id="register-password-hint">Must be at least 8 characters with letters and numbers</span>
                 </div>
                 <div class="form-field">
                     <label for="register-confirm-password">Confirm password</label>
-                    <input type="password" id="register-confirm-password" name="confirm_password" autocomplete="new-password" required>
+                    <input 
+                        type="password" 
+                        id="register-confirm-password" 
+                        name="confirm_password" 
+                        autocomplete="new-password" 
+                        required
+                        aria-describedby="register-confirm-password-error"
+                    >
+                    <span class="error-message" id="register-confirm-password-error" role="alert"></span>
                 </div>
                 <button class="btn-primary" type="submit">Create Account</button>
             </form>
@@ -37,6 +74,166 @@
             </footer>
         </section>
     </main>
+    <script>
+        const registerForm = document.getElementById('register-form');
+        const nameInput = document.getElementById('register-name');
+        const emailInput = document.getElementById('register-email');
+        const passwordInput = document.getElementById('register-password');
+        const confirmPasswordInput = document.getElementById('register-confirm-password');
+        const nameError = document.getElementById('register-name-error');
+        const emailError = document.getElementById('register-email-error');
+        const passwordError = document.getElementById('register-password-error');
+        const confirmPasswordError = document.getElementById('register-confirm-password-error');
+
+        // Real-time validation
+        nameInput.addEventListener('blur', validateName);
+        nameInput.addEventListener('input', () => {
+            if (nameError.textContent) validateName();
+        });
+
+        emailInput.addEventListener('blur', validateEmail);
+        emailInput.addEventListener('input', () => {
+            if (emailError.textContent) validateEmail();
+        });
+
+        passwordInput.addEventListener('blur', validatePassword);
+        passwordInput.addEventListener('input', () => {
+            if (passwordError.textContent) validatePassword();
+            // Re-validate confirm password when password changes
+            if (confirmPasswordInput.value) validateConfirmPassword();
+        });
+
+        confirmPasswordInput.addEventListener('blur', validateConfirmPassword);
+        confirmPasswordInput.addEventListener('input', () => {
+            if (confirmPasswordError.textContent) validateConfirmPassword();
+        });
+
+        function validateName() {
+            const name = nameInput.value.trim();
+            nameError.textContent = '';
+            nameInput.classList.remove('error');
+
+            if (!name) {
+                nameError.textContent = 'Full name is required';
+                nameInput.classList.add('error');
+                return false;
+            }
+
+            if (name.length < 2) {
+                nameError.textContent = 'Name must be at least 2 characters';
+                nameInput.classList.add('error');
+                return false;
+            }
+
+            const namePattern = /^[A-Za-z\s]{2,}$/;
+            if (!namePattern.test(name)) {
+                nameError.textContent = 'Name can only contain letters and spaces';
+                nameInput.classList.add('error');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            emailError.textContent = '';
+            emailInput.classList.remove('error');
+
+            if (!email) {
+                emailError.textContent = 'Email address is required';
+                emailInput.classList.add('error');
+                return false;
+            }
+
+            const emailPattern = /^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/i;
+            if (!emailPattern.test(email)) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailInput.classList.add('error');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            passwordError.textContent = '';
+            passwordInput.classList.remove('error');
+
+            if (!password) {
+                passwordError.textContent = 'Password is required';
+                passwordInput.classList.add('error');
+                return false;
+            }
+
+            if (password.length < 8) {
+                passwordError.textContent = 'Password must be at least 8 characters';
+                passwordInput.classList.add('error');
+                return false;
+            }
+
+            // Check for at least one letter and one number
+            const hasLetter = /[A-Za-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+
+            if (!hasLetter || !hasNumber) {
+                passwordError.textContent = 'Password must contain at least one letter and one number';
+                passwordInput.classList.add('error');
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            confirmPasswordError.textContent = '';
+            confirmPasswordInput.classList.remove('error');
+
+            if (!confirmPassword) {
+                confirmPasswordError.textContent = 'Please confirm your password';
+                confirmPasswordInput.classList.add('error');
+                return false;
+            }
+
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = 'Passwords do not match';
+                confirmPasswordInput.classList.add('error');
+                return false;
+            }
+
+            return true;
+        }
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+            const isConfirmPasswordValid = validateConfirmPassword();
+
+            if (isNameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid) {
+                // Form is valid, you can submit here
+                console.log('Form is valid, submitting...');
+                // registerForm.submit(); // Uncomment when ready to submit
+                alert('Registration form is valid! (This is a demo)');
+            } else {
+                // Focus first invalid field
+                if (!isNameValid) {
+                    nameInput.focus();
+                } else if (!isEmailValid) {
+                    emailInput.focus();
+                } else if (!isPasswordValid) {
+                    passwordInput.focus();
+                } else if (!isConfirmPasswordValid) {
+                    confirmPasswordInput.focus();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
 

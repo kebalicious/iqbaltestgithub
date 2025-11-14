@@ -198,6 +198,41 @@ a:focus {
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
+.form-field input.error,
+.form-field textarea.error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+.form-field input.error:focus,
+.form-field textarea.error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+    min-height: 1.25rem;
+}
+
+.error-message:empty {
+    display: none;
+}
+
+.field-hint {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.form-field input.error ~ .field-hint {
+    display: none;
+}
+
 .btn-primary {
     background: var(--primary);
     color: #fff;
